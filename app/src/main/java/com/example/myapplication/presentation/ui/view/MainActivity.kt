@@ -9,7 +9,7 @@ import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.myapplication.data.model.Post
-import com.example.myapplication.presentation.RecyclerAdapter
+import com.example.myapplication.RecyclerAdapter
 import com.example.myapplication.databinding.ActivityMainBinding
 import com.example.myapplication.presentation.di.App
 import com.example.myapplication.presentation.ui.viewmodel.MainViewModel
@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.submitButton.setOnClickListener {
-            if(viewModel.form.value != null)
+            if(viewModel.form.value != null && isOnline())
                 sendForm(adapter.response)
         }
     }
