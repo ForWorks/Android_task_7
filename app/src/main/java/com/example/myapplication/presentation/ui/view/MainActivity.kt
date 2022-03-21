@@ -8,12 +8,14 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.example.myapplication.R
 import com.example.myapplication.data.model.Post
-import com.example.myapplication.RecyclerAdapter
+import com.example.myapplication.presentation.RecyclerAdapter
 import com.example.myapplication.databinding.ActivityMainBinding
 import com.example.myapplication.presentation.di.App
 import com.example.myapplication.presentation.ui.viewmodel.MainViewModel
 import com.example.myapplication.presentation.ui.viewmodel.ViewModelFactory
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
 import javax.inject.Inject
 
@@ -32,6 +34,7 @@ class MainActivity : AppCompatActivity() {
         (application as App).getAppComponent().inject(this)
 
         if (viewModel.form.value == null) {
+            binding.progressBar.visibility = View.VISIBLE
             CoroutineScope(Dispatchers.IO).launch {
                 while (!isOnline()) delay(1000)
                 getForm()
@@ -48,6 +51,8 @@ class MainActivity : AppCompatActivity() {
         binding.submitButton.setOnClickListener {
             if(viewModel.form.value != null && isOnline())
                 sendForm(adapter.response)
+            else
+                Snackbar.make(binding.root, resources.getString(R.string.check_connection), Snackbar.LENGTH_LONG).show()
         }
     }
 
@@ -60,7 +65,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun getForm() {
         CoroutineScope(Dispatchers.IO).launch {
-            runOnUiThread { binding.progressBar.visibility = View.VISIBLE }
             viewModel.getForm()
             runOnUiThread { binding.progressBar.visibility = View.INVISIBLE }
         }

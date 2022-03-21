@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.domain.utils
 
 object Constants {
     const val BASE_URL = "http://test.clevertec.ru/tt/"

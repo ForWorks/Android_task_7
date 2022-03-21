@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.presentation
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myapplication.R
 import com.example.myapplication.data.model.Field
 import com.example.myapplication.databinding.ListItemBinding
 import com.example.myapplication.databinding.NumberItemBinding
@@ -47,6 +48,7 @@ class RecyclerAdapter( private val fields: List<Field>): RecyclerView.Adapter<Re
         val binding = TextItemBinding.bind(view)
         fun bind(field : Field) {
             binding.textTextView.text = field.title
+            response[field.name.toString()] = ""
             binding.textEditText.addTextChangedListener {
                 response[field.name.toString()] = binding.textEditText.text.toString()
             }
@@ -57,8 +59,12 @@ class RecyclerAdapter( private val fields: List<Field>): RecyclerView.Adapter<Re
         val binding = NumberItemBinding.bind(view)
         fun bind(field: Field) {
             binding.numberTextView.text = field.title
+            response[field.name.toString()] = ""
             binding.numberEditText.addTextChangedListener {
-                response[field.name.toString()] = binding.numberEditText.text.toString()
+                var string = binding.numberEditText.text.toString()
+                if(!string.contains('.'))
+                    string += ".0"
+                response[field.name.toString()] = string
             }
         }
     }
@@ -67,23 +73,24 @@ class RecyclerAdapter( private val fields: List<Field>): RecyclerView.Adapter<Re
         val binding = ListItemBinding.bind(view)
         fun bind(field: Field) {
             binding.listTextView.text = field.title
+            val group = binding.listGroup
             var hasNone = false
             field.values?.forEach {
                 if (it.key != NONE) {
                     val button = RadioButton(binding.root.context)
                     button.text = it.value
                     button.hint = it.key
-                    binding.listGroup.addView(button)
+                    group.addView(button)
                 } else {
                     hasNone = true
                     response[field.name.toString()] = it.key
                 }
             }
-            if(!hasNone)
-                binding.listGroup.check(binding.listGroup.getChildAt(0).id)
-            binding.listGroup.setOnCheckedChangeListener { radioGroup, i ->
+            group.setOnCheckedChangeListener { radioGroup, i ->
                 response[field.name.toString()] = radioGroup.findViewById<RadioButton>(i).hint.toString()
             }
+            if(!hasNone)
+                group.check(group.getChildAt(0).id)
         }
     }
 

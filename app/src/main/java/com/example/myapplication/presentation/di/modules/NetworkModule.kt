@@ -1,6 +1,6 @@
 package com.example.myapplication.presentation.di.modules
 
-import com.example.myapplication.Constants.BASE_URL
+import com.example.myapplication.domain.utils.Constants.BASE_URL
 import com.example.myapplication.data.service.Service
 import dagger.Module
 import dagger.Provides

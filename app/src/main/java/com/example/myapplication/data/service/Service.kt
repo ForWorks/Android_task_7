@@ -1,7 +1,7 @@
 package com.example.myapplication.data.service
 
-import com.example.myapplication.Constants.GET_ENDPOINT
-import com.example.myapplication.Constants.POST_ENDPOINT
+import com.example.myapplication.domain.utils.Constants.GET_ENDPOINT
+import com.example.myapplication.domain.utils.Constants.POST_ENDPOINT
 import com.example.myapplication.data.model.Form
 import com.example.myapplication.data.model.Post
 import com.example.myapplication.data.model.Result
