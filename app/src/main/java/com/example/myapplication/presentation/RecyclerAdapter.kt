@@ -48,9 +48,11 @@ class RecyclerAdapter( private val fields: List<Field>): RecyclerView.Adapter<Re
         val binding = TextItemBinding.bind(view)
         fun bind(field : Field) {
             binding.textTextView.text = field.title
-            response[field.name.toString()] = ""
+            response[field.name.toString()] = state.getOrDefault(field.name.toString(), EMPTY)
+            binding.textEditText.setText(state.getOrDefault(field.name, EMPTY))
             binding.textEditText.addTextChangedListener {
                 response[field.name.toString()] = binding.textEditText.text.toString()
+                state[field.name.toString()] = binding.textEditText.text.toString()
             }
         }
     }
@@ -59,12 +61,17 @@ class RecyclerAdapter( private val fields: List<Field>): RecyclerView.Adapter<Re
         val binding = NumberItemBinding.bind(view)
         fun bind(field: Field) {
             binding.numberTextView.text = field.title
-            response[field.name.toString()] = ""
+            response[field.name.toString()] = state.getOrDefault(field.name.toString(), EMPTY)
+            binding.numberEditText.setText(state.getOrDefault(field.name, EMPTY))
             binding.numberEditText.addTextChangedListener {
                 var string = binding.numberEditText.text.toString()
-                if(!string.contains('.'))
-                    string += ".0"
+                if (string != EMPTY) {
+                    if (string == DOT)
+                        string += ZERO
+                    string = string.toDouble().toString()
+                }
                 response[field.name.toString()] = string
+                state[field.name.toString()] = string
             }
         }
     }
@@ -101,5 +108,9 @@ class RecyclerAdapter( private val fields: List<Field>): RecyclerView.Adapter<Re
         const val NUMERIC = 1
         const val LIST = 2
         const val NONE = "none"
+        const val EMPTY = ""
+        const val ZERO = "0"
+        const val DOT = "."
+        val state = mutableMapOf<String, String>()
     }
 }
